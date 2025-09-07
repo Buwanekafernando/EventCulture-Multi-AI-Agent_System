@@ -9,5 +9,9 @@ client = AsyncIOMotorClient(os.getenv("MONGO_URI"))
 #database
 db = client["event_finder"]
 
-#collections
+#user
+users_collection = db["users"]
+#events
 events_collection = db["events"]
+#recommendations
+recommendations_collection = db["recommendations"]
