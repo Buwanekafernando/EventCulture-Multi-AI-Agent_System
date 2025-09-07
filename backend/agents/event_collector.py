@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from db.mongo import events_collection
 from pydantic import BaseModel
+from pydantic import ValidationError
 from typing import List
 import openai
 import json
@@ -80,7 +81,14 @@ async def collect_events():
             continue
 
     # Validate
-    validated = [Event(**event).dict() for event in all_events if event]
+    validated = []
+    for event in all_events:
+        if event:
+            try:
+                validated.append(Event(**event))
+            except ValidationError as e:
+                logger.warning(f"[Validation] Skipped invalid event from {event.get('source', 'unknown')}: {e}")
+
 
     try:
         # Insert into MongoDB 
