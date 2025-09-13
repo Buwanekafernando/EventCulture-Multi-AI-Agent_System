@@ -1,9 +1,6 @@
 # FastAPI
 uvicorn[standard]
 fastapi[all]
-# MongoDB
-motor
-pydantic
 # OpenAI
 openai
 langchain
