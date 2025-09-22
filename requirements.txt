@@ -1,21 +1,30 @@
-# FastAPI
+# FastAPI & Server
+fastapi
 uvicorn[standard]
-fastapi[all]
-# OpenAI
-openai
-langchain
-# NLP
-spacy
-transformers
-# Information Retrieval
-faiss-cpu
-scikit-learn
+
+# Database
+sqlalchemy
+pydantic
+python-dotenv
+
+# HTTP & Async
+httpx
+aiohttp
+
 # Auth
 authlib
-python-jose[cryptography]
+google-auth
+google-auth-oauthlib
 passlib[bcrypt]
-python-dotenv
-requests
-aiohttp
-#WebSockets
-websockets
+
+# Gemini API
+google-generativeai
+
+# NLP & ML
+spacy
+transformers
+
+
+scikit-learn
+faiss-cpu
+
