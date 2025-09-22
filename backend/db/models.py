@@ -22,3 +22,12 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     name = Column(String)
     preferences = Column(Text)
+
+
+class Recommendation(Base):
+    __tablename__ = "recommendations"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer)
+    interests = Column(Text)
+    sentiment = Column(String)
+    events_json = Column(Text)  
