@@ -1,3 +1,35 @@
+#<<<<<<< agent-savindi
+# FastAPI & Server
+fastapi
+uvicorn[standard]
+
+# Database
+sqlalchemy
+pydantic
+python-dotenv
+
+# HTTP & Async
+httpx
+aiohttp
+
+# Auth
+authlib
+google-auth
+google-auth-oauthlib
+passlib[bcrypt]
+
+# Gemini API
+google-generativeai
+
+# NLP & ML
+spacy
+transformers
+
+
+scikit-learn
+faiss-cpu
+
+#=======
 # FastAPI
 uvicorn[standard]
 fastapi[all]
@@ -22,3 +54,4 @@ requests
 aiohttp
 #WebSockets
 websockets
+#>>>>>>> main
