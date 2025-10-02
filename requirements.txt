@@ -1,3 +1,7 @@
+#<<<<<<< agent-praneepa
+#=======
+#<<<<<<< agent-savindi
+#>>>>>>> main
 # FastAPI & Server
 fastapi
 uvicorn[standard]
@@ -28,3 +32,32 @@ transformers
 scikit-learn
 faiss-cpu
 
+#<<<<<<< agent-praneepa
+#=======
+#=======
+# FastAPI
+uvicorn[standard]
+fastapi[all]
+# MongoDB
+motor
+pydantic
+# OpenAI
+openai
+langchain
+# NLP
+spacy
+transformers
+# Information Retrieval
+faiss-cpu
+scikit-learn
+# Auth
+authlib
+python-jose[cryptography]
+passlib[bcrypt]
+python-dotenv
+requests
+aiohttp
+#WebSockets
+websockets
+#>>>>>>> main
+#>>>>>>> main
