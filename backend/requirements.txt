@@ -1,0 +1,29 @@
+# FastAPI & Server
+fastapi
+uvicorn[standard]
+
+# Database
+sqlalchemy
+pydantic
+python-dotenv
+
+# HTTP & Async
+httpx
+
+
+# Auth
+authlib
+google-auth
+google-auth-oauthlib
+
+# Gemini API
+google-generativeai
+
+# NLP & ML
+spacy
+transformers
+
+
+scikit-learn
+faiss-cpu
+
