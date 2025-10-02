@@ -1,4 +1,7 @@
+#<<<<<<< agent-praneepa
+#=======
 #<<<<<<< agent-savindi
+#>>>>>>> main
 # FastAPI & Server
 fastapi
 uvicorn[standard]
@@ -29,6 +32,8 @@ transformers
 scikit-learn
 faiss-cpu
 
+#<<<<<<< agent-praneepa
+#=======
 #=======
 # FastAPI
 uvicorn[standard]
@@ -54,4 +59,5 @@ requests
 aiohttp
 #WebSockets
 websockets
+#>>>>>>> main
 #>>>>>>> main
