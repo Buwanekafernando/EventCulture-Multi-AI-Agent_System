@@ -1,3 +1,4 @@
+
 # FastAPI & Server
 fastapi
 uvicorn[standard]
@@ -27,4 +28,30 @@ transformers
 
 scikit-learn
 faiss-cpu
+
+
+# FastAPI
+uvicorn[standard]
+fastapi[all]
+# MongoDB
+motor
+pydantic
+# OpenAI
+openai
+langchain
+# NLP
+spacy
+transformers
+# Information Retrieval
+faiss-cpu
+scikit-learn
+# Auth
+authlib
+python-jose[cryptography]
+passlib[bcrypt]
+python-dotenv
+requests
+aiohttp
+#WebSockets
+websockets
 
