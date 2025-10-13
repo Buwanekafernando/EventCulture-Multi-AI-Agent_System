@@ -1,0 +1,8 @@
+.role-selection-section { padding: 24px; }
+.role-selection-container { max-width: 1000px; margin: 0 auto; }
+.role-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.role-card { border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; background: #fff; }
+.role-card.selected { outline: 2px solid #2563eb; }
+.role-icon { font-size: 32px; margin-bottom: 8px; }
+.role-select-btn { margin-top: 12px; padding: 8px 12px; border: 1px solid #e5e7eb; border-radius: 8px; background: #2563eb; color: #fff; }
+
