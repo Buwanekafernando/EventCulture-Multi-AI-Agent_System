@@ -18,11 +18,7 @@ def query_gemini(interests: List[str], sentiment: str) -> List[dict]:
     - event_name
     - location (must be in Sri Lanka)
     - date (in YYYY-MM-DD format)
-    - description
-    - booking_url
-    - source (always 'recommendation')
 
-    Focus on events happening in major Sri Lankan cities like Colombo, Kandy, Galle, Jaffna, etc.
     Format the output strictly as a JSON array of objects.
     """
 
@@ -38,6 +34,7 @@ def query_gemini(interests: List[str], sentiment: str) -> List[dict]:
             "booking_url": "",
             "source": "recommendation"
         }]
+
 
 def get_personalized_recommendations(user_id: int, interests: List[str], sentiment: str, user_tier: str = "free") -> List[Dict]:
     """Get personalized recommendations based on user preferences and existing events."""
