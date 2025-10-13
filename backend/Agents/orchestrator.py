@@ -1,16 +1,19 @@
 from fastapi import APIRouter
-from agents.event_collector import router as collector_router
-from agents.nlp_agent import router as nlp_router
-from router.rec_agent import router as recommender_router
-from agents.location_agent import router as location_router
+from router.event_agent_r import router as collector_router
+from router.nlp_agent_r import router as nlp_router
+from router.rec_agent_r import router as recommender_router
+from router.location_agent_r import router as location_router
+from router.analysis_agent_r import router as analysis_router
 
 router = APIRouter()
 
-#event collector agent
 router.include_router(collector_router, prefix="/collector")
 
+router.include_router(nlp_router, prefix="/nlp")
 
+router.include_router(recommender_router, prefix="/recommend")
 
-# Location Agent
 router.include_router(location_router, prefix="/location")
+
+router.include_router(analysis_router, prefix="/analytics")
 
