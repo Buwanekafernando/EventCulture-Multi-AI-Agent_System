@@ -4,6 +4,7 @@ uvicorn[standard]
 
 # Database
 sqlalchemy
+pymysql
 pydantic
 python-dotenv
 
@@ -26,4 +27,7 @@ transformers
 
 scikit-learn
 faiss-cpu
+
+itsdangerous>=2.1.2
+
 
