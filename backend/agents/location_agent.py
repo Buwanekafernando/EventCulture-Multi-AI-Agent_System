@@ -7,11 +7,6 @@ import httpx
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel("gemini-2.5-flash")
 
-
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-model = genai.GenerativeModel("gemini-pro")
-
-
 def refine_location_with_llm(raw_location: str, description: str) -> str:
     prompt = f"""
     You are a location assistant. Given the raw location and event description, infer the most accurate physical location name suitable for Google Maps search.
@@ -23,7 +18,6 @@ def refine_location_with_llm(raw_location: str, description: str) -> str:
     """
 
     try:
-
         response = model.generate_content(prompt) 
         return response.text.strip("```").strip()
     except Exception as e:
@@ -131,9 +125,3 @@ def get_directions(from_location: str, to_location: str, travel_mode: str = "dri
         "distance": "12.5 km",
         "directions_url": f"https://www.google.com/maps/dir/{from_location}/{to_location}/@{travel_mode}"
     }  
-
-        response = model.generate_content(prompt)
-        return response.text.strip("```").strip()
-    except Exception as e:
-        return raw_location  
-

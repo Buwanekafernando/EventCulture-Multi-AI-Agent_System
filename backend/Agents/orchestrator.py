@@ -9,7 +9,6 @@ router = APIRouter()
 
 router.include_router(collector_router, prefix="/collector")
 
-
 router.include_router(nlp_router, prefix="/nlp")
 
 router.include_router(recommender_router, prefix="/recommend")
@@ -17,5 +16,4 @@ router.include_router(recommender_router, prefix="/recommend")
 router.include_router(location_router, prefix="/location")
 
 router.include_router(analysis_router, prefix="/analytics")
-
 

@@ -9,27 +9,15 @@ from fastapi import Request
 from fastapi.responses import HTMLResponse
 
 
+
+from auth.google_auth import router as google_auth_router
+
+from agents.orchestrator import router as orchestrator_router  
+from db.database import Base, engine
+
+load_dotenv()
+
 app = FastAPI()
-
-
-app.include_router(orchestrator_router, prefix="/api")
-app.include_router(auth_router, prefix="/auth")
-app.include_router(event.router)
-
-
-
-Base.metadata.create_all(bind=engine)
-
-
-Base.metadata.create_all(bind=engine)
-
-Base.metadata.create_all(bind=engine)
-
-from agents.orchestrator import router as orchestrator_router
-from auth.google_oauth import router as auth_router
-
-
-
 
 # Add CORS middleware first
 app.add_middleware(
@@ -62,7 +50,6 @@ async def session_test(request: Request):
 app.include_router(google_auth_router)
 
 app.include_router(orchestrator_router, prefix="/api")
-
 
 
 
@@ -272,6 +259,5 @@ async def trigger_nlp_processing_manually():
             status_code=500,
             detail=f"Failed to trigger NLP processing: {str(e)}"
         )
-
 
 
