@@ -13,3 +13,5 @@ class EventCreate(BaseModel): #event from ai output
 
 class EventOut(EventCreate):
     id: int
+    views: Optional[int] = 0
+    clicks: Optional[int] = 0
