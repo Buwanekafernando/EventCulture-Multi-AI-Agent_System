@@ -1,0 +1,240 @@
+/* EventPage.css */
+.app {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #333;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .nav-right a {
+    text-decoration: none;
+    color: #666;
+  }
+  
+  .hero {
+    position: relative;
+    color: white;
+    text-align: center;
+  }
+  
+  .hero-image {
+    height: 500px;
+    background: #6f42c1;
+  }
+  
+  .event-info {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  
+  .event-info h1 {
+    margin: 0;
+  }
+  
+  .event-info p {
+    margin: 0.5rem 0;
+  }
+  
+  .book-btn {
+    background: #6f42c1;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .location-btn {
+    display: inline-block;
+    background: #28a745;
+    color: white;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    margin-top: 1rem;
+    cursor: pointer;
+    border: none;
+  }
+
+  .location-btn:hover {
+    background: #218838;
+  }
+  
+  .event-details {
+    display: flex;
+    justify-content: space-around;
+    padding: 2rem;
+    background: white;
+  }
+  
+  .summary, .details {
+    flex: 1;
+    padding: 1rem;
+  }
+  
+  .summary h2, .details h2 {
+    margin-bottom: 1rem;
+  }
+  
+  .details ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .details li {
+    margin: 0.5rem 0;
+  }
+  
+  .location {
+    padding: 2rem;
+    text-align: center;
+    background: #f5f5f5;
+  }
+  
+  .map-placeholder {
+    height: 200px;
+    background: #e9ecef;
+    margin: 1rem auto;
+    max-width: 600px;
+  }
+  
+  .past-events, .recommended-events {
+    padding: 2rem;
+    background: white;
+  }
+  
+  .past-events h2, .recommended-events h2 {
+    margin-bottom: 1rem;
+  }
+  
+  .past-events-grid, .recommended-events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .event-card {
+    text-align: center;
+  }
+  
+  .image-placeholder {
+    height: 150px;
+    background: #ddd;
+    margin-bottom: 0.5rem;
+  }
+  
+  .footer {
+    background: #343a40;
+    color: white;
+    padding: 2rem 0;
+  }
+  
+  .footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  
+  .footer-section ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .footer-section a {
+    color: #ccc;
+    text-decoration: none;
+  }
+  
+  .footer-bottom {
+    text-align: center;
+    padding-top: 1rem;
+    border-top: 1px solid #495057;
+    margin-top: 1rem;
+  }
+  
+  .social-links {
+    margin-top: 0.5rem;
+  }
+  
+  .social-links a {
+    color: white;
+    margin: 0 0.5rem;
+    font-size: 1.2rem;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .event-details {
+      flex-direction: column;
+    }
+  
+    .hero-image {
+      height: 300px;
+    }
+  }
+
+  /* Tier-based booking styles */
+  .login-prompt, .upgrade-prompt {
+    background: #fef3c7;
+    border: 1px solid #f59e0b;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .login-message, .upgrade-message {
+    margin: 0 0 12px 0;
+    color: #92400e;
+    font-size: 14px;
+  }
+
+  .btn-large {
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .btn-upgrade {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+    border-color: #f59e0b;
+    font-weight: 600;
+  }
+
+  .btn-upgrade:hover {
+    background: linear-gradient(135deg, #d97706, #b45309);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+  }
+
+  .btn-upgrade::before {
+    content: "⭐";
+    margin-right: 6px;
+  }

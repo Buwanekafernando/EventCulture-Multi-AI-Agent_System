@@ -1,0 +1,183 @@
+.app {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #333;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .nav-right a {
+    text-decoration: none;
+    color: #666;
+  }
+  
+  .hero {
+    background: #6f42c1; /* Purple */
+    color: white;
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .hero h1 {
+    margin: 0;
+  }
+  
+  .hero p {
+    margin: 0.5rem 0 0;
+  }
+  
+  .details-section {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem;
+    gap: 2rem;
+  }
+  
+  .venue-details {
+    flex: 1;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .venue-details h2 {
+    margin-bottom: 1rem;
+  }
+  
+  .venue-details p {
+    margin: 0.5rem 0;
+  }
+  
+  .directions-btn {
+    background: #6f42c1;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 1rem;
+  }
+  
+  .view-maps {
+    margin-top: 0.5rem;
+    color: #007bff;
+  }
+  
+  .map-preview {
+    flex: 1;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .map-placeholder {
+    height: 200px;
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+  }
+  
+  .tip {
+    text-align: center;
+    color: #666;
+    padding: 1rem;
+    background: #e9f7fe;
+    border-radius: 8px;
+    margin: 0 2rem;
+  }
+  
+  .interactive-map {
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .large-map-placeholder {
+    height: 400px;
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    margin: 1rem auto;
+    max-width: 100%;
+  }
+  
+  .transportation {
+    display: flex;
+    justify-content: space-around;
+    padding: 2rem;
+    gap: 1rem;
+  }
+  
+  .transport-card {
+    flex: 1;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  
+  .icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .footer {
+    background: #343a40;
+    color: white;
+    padding: 2rem 0;
+  }
+  
+  .footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  
+  .footer-section ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .footer-section a {
+    color: #ccc;
+    text-decoration: none;
+  }
+  
+  .footer-bottom {
+    text-align: center;
+    padding-top: 1rem;
+    border-top: 1px solid #495057;
+    margin-top: 1rem;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .details-section {
+      flex-direction: column;
+    }
+  
+    .transportation {
+      flex-direction: column;
+    }
+  }

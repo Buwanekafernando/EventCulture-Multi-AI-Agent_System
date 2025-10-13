@@ -1,0 +1,8 @@
+.map-controls { padding: 16px; border-bottom: 1px solid #e5e7eb; background: #f8fafc; }
+.map-container { border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; background: #fff; }
+.mode-btn { padding: 8px 12px; border: 1px solid #e5e7eb; border-radius: 8px; margin-right: 8px; }
+.mode-btn.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+.legend { margin-top: 12px; }
+.legend-items { display: flex; gap: 12px; flex-wrap: wrap; }
+.legend-item { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border: 1px solid #e5e7eb; border-radius: 999px; background: #fff; }
+
