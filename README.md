@@ -94,7 +94,7 @@ It allows users to:
 | **Frontend** | React.js |
 | **Backend** | FastAPI (Python) |
 | **Database** | MySQL |
-| **AI / NLP** | Gemini API / OpenAI / SpaCy |
+| **AI / NLP** | Gemini API / SpaCy |
 | **Maps Integration** | Google Maps API |
 | **Version Control** | GitHub |
 
@@ -116,13 +116,6 @@ Each intelligent agent works collaboratively to deliver automated, personalized,
 
 ---
 
-## 👥 Contributors
-
-- **Project Lead:** Buwaneka Fernando  
-- **Team Members:** *(Add your team members here)*  
-
----
-
 ## 📜 License
 
 This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
@@ -132,7 +125,7 @@ This project is licensed under the **MIT License** – see the [LICENSE](LICENSE
 ## 🌟 Acknowledgements
 
 - Google Maps Platform  
-- OpenAI / Gemini NLP APIs  
+- Gemini NLP APIs  
 - Bing & Google event data sources  
 - FastAPI and React open-source communities  
 
