@@ -12,7 +12,6 @@ const EventCulture = () => {
         </div>
         <nav className="nav-right">
           <Link to="/">Home</Link>
-          <a href="/locations">Locations</a>
           <a href="/contact">Contact</a>
           <button className="login-btn">Login</button>
         </nav>
@@ -135,7 +134,6 @@ const EventCulture = () => {
             <ul>
               <li><a href="/">Home</a></li>
               <li><a href="/events">Events</a></li>
-              <li><a href="/locations">Locations</a></li>
               <li><a href="/contact">Contact</a></li>
             </ul>
           </div>

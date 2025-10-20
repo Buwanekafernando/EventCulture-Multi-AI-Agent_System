@@ -1,7 +1,9 @@
 import React from 'react';
+import { FaStar, FaRegCircle } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import '../styles/Header.css';
+import logo from '../assets/logouser.png';
 
 const Header = () => {
   const { user, logout, isAuthenticated } = useAuth();
@@ -15,7 +17,9 @@ const Header = () => {
       <div className="header-container">
         <div className="nav-left">
           <Link to="/" className="logo">
-            🎭 EventCulture
+          <img src={logo} alt="logo" style={{ width: 28, height: 28, marginRight: 8, verticalAlign: 'middle' }} />
+            EventCulture
+
           </Link>
         </div>
         
@@ -25,11 +29,9 @@ const Header = () => {
               <Link to="/user-dashboard" className="nav-link">
                 Dashboard
               </Link>
-              <Link to="/event-location" className="nav-link">
-                Map
-              </Link>
+              {/* Removed Map link */}
               <Link to="/admin" className="nav-link">
-                Admin
+                Refresh
               </Link>
               <button 
                 className="preferences-btn nav-link"
@@ -40,7 +42,7 @@ const Header = () => {
               <div className="user-info">
                 <span className="user-name">{user?.name}</span>
                 <span className={`tier-badge ${user?.tier === 'pro' ? 'pro' : 'free'}`}>
-                  {user?.tier === 'pro' ? '⭐ Pro' : '🆓 Free'}
+                  {user?.tier === 'pro' ? (<><FaStar style={{ marginRight: 6 }} />Pro</>) : (<><FaRegCircle style={{ marginRight: 6 }} />Free</>)}
                 </span>
               </div>
               <button className="logout-btn" onClick={handleLogout}>
@@ -52,9 +54,13 @@ const Header = () => {
               <Link to="/" className="nav-link">
                 Home
               </Link>
-              <Link to="/login" className="nav-link">
-                Login
-              </Link>
+              <button
+                type="button"
+                className="login-btn"
+                onClick={() => window.dispatchEvent(new CustomEvent('open-tier-selection'))}
+              >
+                Login with Google
+              </button>
             </>
           )}
         </nav>

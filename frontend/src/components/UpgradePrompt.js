@@ -26,7 +26,6 @@ const UpgradePrompt = ({ onUpgrade, onClose }) => {
     'Direct event booking',
     'Enhanced location features with directions',
     'Virtual event registration',
-    'Priority customer support',
     'Advanced analytics and insights',
     'Early access to new features'
   ];
@@ -56,7 +55,7 @@ const UpgradePrompt = ({ onUpgrade, onClose }) => {
 
           <div className="upgrade-pricing">
             <div className="price-display">
-              <span className="price">$9.99</span>
+              <span className="price">$4.99</span>
               <span className="period">/month</span>
             </div>
             <p className="pricing-note">Cancel anytime • 30-day money-back guarantee</p>

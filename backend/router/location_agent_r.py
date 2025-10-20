@@ -2,7 +2,14 @@ from fastapi import APIRouter, HTTPException, Depends
 from urllib.parse import quote
 from db.database import SessionLocal
 from db.models import Event
-from agents.location_agent import get_location_data, refine_location_with_llm, get_directions
+from agents.location_agent import (
+    get_location_data, 
+    refine_location_with_llm, 
+    get_directions,
+    get_multi_directions,
+    batch_process_event_locations,
+    get_google_maps_data
+)
 from schema.location_agent_s import LocationResponse, OpenLayersLocationResponse
 from auth.google_auth import get_current_user  
 import os
@@ -116,3 +123,131 @@ def get_directions_endpoint(
         )
     
     return get_directions(from_location, to_location, travel_mode)
+
+@router.get("/directions/summary")
+def get_multi_mode_directions_endpoint(
+    from_location: str,
+    to_location: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get distance/time summaries for car, bus, and train (Pro feature)."""
+    user_tier = current_user.get("tier", "free")
+    if user_tier != "pro":
+        raise HTTPException(
+            status_code=403,
+            detail="Pro tier required for directions feature. Please upgrade to Pro."
+        )
+    return get_multi_directions(from_location, to_location)
+
+@router.post("/process-locations")
+async def process_event_locations(current_user: dict = Depends(get_current_user)):
+    """Process all events for location data (Admin/Pro feature)."""
+    user_tier = current_user.get("tier", "free")
+    
+    if user_tier != "pro":
+        raise HTTPException(
+            status_code=403, 
+            detail="Pro tier required for location processing. Please upgrade to Pro."
+        )
+    
+    try:
+        result = await batch_process_event_locations()
+        return result
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to process event locations: {str(e)}"
+        )
+
+@router.get("/google-maps/{event_id}")
+def get_google_maps_event_data(
+    event_id: int, 
+    user_location: str = None,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get Google Maps data for a specific event with optional user location routes (Pro feature only)."""
+    user_tier = current_user.get("tier", "free")
+    
+    if user_tier != "pro":
+        raise HTTPException(
+            status_code=403, 
+            detail="Pro tier required for Google Maps features. Please upgrade to Pro."
+        )
+    
+    try:
+        maps_data = get_google_maps_data(event_id, user_location)
+        
+        if "error" in maps_data:
+            raise HTTPException(status_code=404, detail=maps_data["error"])
+        
+        return maps_data
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to get Google Maps data: {str(e)}"
+        )
+
+@router.get("/user-routes/{event_id}")
+def get_user_location_routes(
+    event_id: int,
+    user_location: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get routes from user location to event location with time and distance (Pro feature only)."""
+    user_tier = current_user.get("tier", "free")
+    
+    if user_tier != "pro":
+        raise HTTPException(
+            status_code=403, 
+            detail="Pro tier required for user location routes. Please upgrade to Pro."
+        )
+    
+    if not user_location or not user_location.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="User location is required"
+        )
+    
+    try:
+        # Get the event first
+        db = SessionLocal()
+        event = db.query(Event).filter(Event.id == event_id).first()
+        db.close()
+        
+        if not event:
+            raise HTTPException(status_code=404, detail="Event not found")
+        
+        # Get location data for the event
+        raw_location = event.location or ""
+        description = event.description or ""
+        location_data = get_location_data(raw_location, description, "pro")
+        
+        if location_data["is_virtual"]:
+            return {
+                "is_virtual": True,
+                "message": "This is a virtual event - no physical routes available",
+                "user_routes": []
+            }
+        
+        # Get user routes if coordinates are available
+        user_routes = []
+        if location_data.get("coordinates"):
+            from agents.location_agent import get_user_location_routes
+            user_routes = get_user_location_routes(user_location, location_data["location_name"], location_data["coordinates"])
+        
+        return {
+            "is_virtual": False,
+            "event_location": location_data["location_name"],
+            "user_location": user_location,
+            "user_routes": user_routes
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to get user location routes: {str(e)}"
+        )

@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { 
+  FaMusic, FaLaptop, FaPalette, FaRunning, FaUtensils, FaGraduationCap, FaTheaterMasks, FaTag, FaGlobe, FaTicketAlt, FaHome, FaArrowLeft, FaMapMarkedAlt, FaMapMarkerAlt, FaCalendarAlt, FaStickyNote, FaClipboardList, FaBroadcastTower, FaChartBar, FaEye, FaHandPointer, FaLock, FaStar
+} from 'react-icons/fa';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { eventsAPI, locationAPI, analyticsAPI } from '../services/api';
@@ -6,12 +9,14 @@ import Header from './Header';
 import Footer from './Footer';
 import EngagementChart from './EngagementChart';
 import '../styles/eventdetail.css';
+import logo from '../assets/logouser.png';
 
 const EventDetail = () => {
   const { eventId } = useParams();
   const { user, isAuthenticated } = useAuth();
   const [event, setEvent] = useState(null);
   const [locationData, setLocationData] = useState(null);
+  const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [bookingLoading, setBookingLoading] = useState(false);
 
@@ -24,13 +29,15 @@ const EventDetail = () => {
   const loadEventDetails = async () => {
     try {
       setLoading(true);
-      const [eventData, locationData] = await Promise.all([
+      const [eventData, locationData, analyticsData] = await Promise.all([
         eventsAPI.getEvent(eventId),
-        locationAPI.getLocation(eventId)
+        locationAPI.getLocation(eventId),
+        analyticsAPI.getEventAnalytics(eventId).catch(() => null) // Optional analytics
       ]);
       
       setEvent(eventData);
       setLocationData(locationData);
+      setAnalytics(analyticsData);
       
       // Track view
       await analyticsAPI.trackInteraction(eventId, 'view');
@@ -67,6 +74,7 @@ const EventDetail = () => {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
+        weekday: 'long',
         hour: '2-digit',
         minute: '2-digit'
       });
@@ -77,15 +85,14 @@ const EventDetail = () => {
 
   const getEventTypeIcon = (eventType) => {
     const icons = {
-      music: '🎵',
-      tech: '💻',
-      art: '🎨',
-      sports: '🏃',
-      food: '🍽️',
-      education: '🎓',
-      other: '🎭'
+      music: <FaMusic />, tech: <FaLaptop />,
+      art: <FaPalette />, sports: <FaRunning />,
+      food: <FaUtensils />, education: <FaGraduationCap />,
+      cultural: <FaTheaterMasks />,
+      theater: <FaTheaterMasks />,
+      other: <FaTheaterMasks />
     };
-    return icons[eventType?.toLowerCase()] || '🎭';
+    return icons[(eventType || '').toLowerCase()] || <FaTheaterMasks />;
   };
 
   const getSentimentColor = (sentiment) => {
@@ -100,40 +107,35 @@ const EventDetail = () => {
 
   if (loading) {
     return (
-      <div className="app">
+      <div className="event-detail-page">
+        <Header />
         <div className="loading-container">
           <div className="loading-spinner">Loading event details...</div>
         </div>
+        <Footer />
       </div>
     );
   }
 
   if (!event) {
     return (
-      <div className="app">
+      <div className="event-detail-page">
+        <Header />
         <div className="error-container">
           <h2>Event not found</h2>
-          <Link to="/" className="btn btn-primary">Back to Home</Link>
+          <p>The event you're looking for doesn't exist or has been removed.</p>
+          <Link to="/user-dashboard" className="btn btn-primary">
+            Back to Dashboard
+          </Link>
         </div>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="app">
-      {/* Header */}
-      <header className="header">
-        <div className="nav-left">
-          <span className="logo">🎭 EventCulture</span>
-        </div>
-        <nav className="nav-right">
-          <Link to={user?.role === 'event' ? '/organizer-dashboard' : '/user-dashboard'}>
-            Dashboard
-          </Link>
-          <Link to="/event-location">Map</Link>
-          <Link to="/">Home</Link>
-        </nav>
-      </header>
+    <div className="event-detail-page">
+      <Header />
 
       {/* Event Detail Section */}
       <section className="event-detail-section">
@@ -151,17 +153,17 @@ const EventDetail = () => {
             
             <div className="event-meta">
               <div className="meta-item">
-                <span className="meta-icon">📍</span>
+                <span className="meta-icon"><FaMapMarkerAlt /></span>
                 <span className="meta-text">
                   {locationData?.cleaned_location || event.location || 'Location TBD'}
                 </span>
               </div>
               <div className="meta-item">
-                <span className="meta-icon">📅</span>
+                <span className="meta-icon"><FaCalendarAlt /></span>
                 <span className="meta-text">{formatDate(event.date)}</span>
               </div>
               <div className="meta-item">
-                <span className="meta-icon">🏷️</span>
+                <span className="meta-icon"><FaTag /></span>
                 <span className={`sentiment-badge ${getSentimentColor(event.sentiment)}`}>
                   {event.sentiment || 'neutral'}
                 </span>
@@ -169,27 +171,27 @@ const EventDetail = () => {
             </div>
           </div>
 
-          {/* Event Content */}
+          {/* Event Content Grid */}
           <div className="event-content">
+            {/* Main Content */}
             <div className="event-main">
               {/* Description */}
               <div className="event-description">
-                <h3>About This Event</h3>
+                <h3><FaStickyNote style={{ marginRight: 8 }} />About This Event</h3>
                 <p>{event.description || 'No description available.'}</p>
+                
+                {event.summary && (
+                  <div className="event-summary">
+                    <h4><FaClipboardList style={{ marginRight: 8 }} />Summary</h4>
+                    <p>{event.summary}</p>
+                  </div>
+                )}
               </div>
-
-              {/* Summary */}
-              {event.summary && (
-                <div className="event-summary">
-                  <h3>Summary</h3>
-                  <p>{event.summary}</p>
-                </div>
-              )}
 
               {/* Tags */}
               {event.tags && event.tags.length > 0 && (
                 <div className="event-tags">
-                  <h3>Tags</h3>
+                  <h3>🏷️ Tags</h3>
                   <div className="tags-container">
                     {event.tags.map((tag, index) => (
                       <span key={index} className="tag">
@@ -200,87 +202,18 @@ const EventDetail = () => {
                 </div>
               )}
 
-              {/* Event Stats */}
-              <div className="event-stats">
-                <h3>Event Statistics</h3>
-                <div className="stats-grid">
-                  <div className="stat-item">
-                    <span className="stat-icon">👁️</span>
-                    <span className="stat-number">{event.views || 0}</span>
-                    <span className="stat-label">Views</span>
-                  </div>
-                  <div className="stat-item">
-                    <span className="stat-icon">👆</span>
-                    <span className="stat-number">{event.clicks || 0}</span>
-                    <span className="stat-label">Clicks</span>
-                  </div>
-                  <div className="stat-item">
-                    <span className="stat-icon">📊</span>
-                    <span className="stat-number">
-                      {((event.clicks || 0) / Math.max(event.views || 1, 1) * 100).toFixed(1)}%
-                    </span>
-                    <span className="stat-label">Engagement</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Event Sidebar */}
-            <div className="event-sidebar">
-              {/* Booking Section */}
-              <div className="booking-section">
-                <h3>Book This Event</h3>
-                {!isAuthenticated ? (
-                  <div className="login-prompt">
-                    <p className="login-message">
-                      🔒 <strong>Sign in to book this event</strong>
-                    </p>
-                    <Link to="/login" className="btn btn-primary btn-large">
-                      Sign In to Book
-                    </Link>
-                  </div>
-                ) : user?.tier === 'pro' ? (
-                  event.booking_url ? (
-                    <button 
-                      className="btn btn-primary btn-large"
-                      onClick={handleBookEvent}
-                      disabled={bookingLoading}
-                    >
-                      {bookingLoading ? 'Processing...' : 'Book Now'}
-                    </button>
-                  ) : (
-                    <p className="no-booking">Booking not available for this event</p>
-                  )
-                ) : (
-                  <div className="upgrade-prompt">
-                    <p className="upgrade-message">
-                      ⭐ <strong>Upgrade to Pro to book events directly</strong>
-                    </p>
-                    <button 
-                      className="btn btn-upgrade btn-large"
-                      onClick={() => {
-                        // This would trigger the upgrade modal
-                        alert('Upgrade to Pro to book events directly!');
-                      }}
-                    >
-                      Upgrade to Pro
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {/* Location Section */}
+              {/* Location Details */}
               <div className="location-section">
-                <h3>Location</h3>
+                <h3><FaMapMarkerAlt style={{ marginRight: 8 }} />Location Information</h3>
                 {locationData?.is_virtual ? (
                   <div className="virtual-location">
-                    <span className="location-icon">🌐</span>
+                    <span className="location-icon"><FaGlobe /></span>
                     <p>Virtual Event</p>
                     <p>This event will be held online</p>
                   </div>
                 ) : (
                   <div className="physical-location">
-                    <span className="location-icon">📍</span>
+                    <span className="location-icon"><FaMapMarkerAlt /></span>
                     <p>{locationData?.cleaned_location || event.location}</p>
                     {locationData?.map_url && (
                       <a 
@@ -292,19 +225,115 @@ const EventDetail = () => {
                         View on Google Maps
                       </a>
                     )}
-                    <Link 
-                      to={`/event-location/${eventId}`}
-                      className="btn btn-outline"
-                    >
-                      View on Map
-                    </Link>
+                    {user?.tier === 'pro' && (
+                      <Link 
+                        to={`/location-map/${eventId}`}
+                        className="btn btn-primary"
+                      >
+                        <FaMapMarkedAlt style={{ marginRight: 6 }} />Location Map
+                      </Link>
+                    )}
                   </div>
                 )}
               </div>
 
-              {/* Event Info */}
+              {/* Booking Section */}
+              <div className="booking-section">
+                <h3><FaTicketAlt style={{ marginRight: 8 }} />Booking Information</h3>
+                <div className="booking-content">
+                  {event.booking_url ? (
+                    <div className="booking-available">
+                      <p>This event is available for booking!</p>
+                      {!isAuthenticated ? (
+                        <div className="login-prompt">
+                          <p className="login-message">
+                            <FaLock style={{ marginRight: 6 }} /><strong>Sign in to book this event</strong>
+                          </p>
+                          <Link to="/login" className="btn btn-primary btn-large">
+                            Sign In to Book
+                          </Link>
+                        </div>
+                      ) : user?.tier === 'pro' ? (
+                        <button 
+                          className="btn btn-primary btn-large"
+                          onClick={handleBookEvent}
+                          disabled={bookingLoading}
+                        >
+                          {bookingLoading ? 'Processing...' : 'Book This Event'}
+                        </button>
+                      ) : (
+                        <div className="upgrade-prompt">
+                          <p className="upgrade-message">
+                            <FaStar style={{ marginRight: 6 }} /><strong>Upgrade to Pro to book events directly</strong>
+                          </p>
+                          <button 
+                            className="btn btn-upgrade btn-large"
+                            onClick={() => {
+                              alert('Upgrade to Pro to book events directly!');
+                            }}
+                          >
+                            Upgrade to Pro
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="booking-unavailable">
+                      <p className="no-booking">Booking information not available for this event.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Sidebar */}
+            <div className="event-sidebar">
+              {/* Event Stats */}
+              <div className="event-stats">
+                <h3><FaChartBar style={{ marginRight: 8 }} />Event Statistics</h3>
+                <div className="stats-grid">
+                  <div className="stat-item">
+                    <span className="stat-icon"><FaEye /></span>
+                    <span className="stat-number">{event.views || 0}</span>
+                    <span className="stat-label">Views</span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-icon"><FaHandPointer /></span>
+                    <span className="stat-number">{event.clicks || 0}</span>
+                    <span className="stat-label">Clicks</span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-icon">📈</span>
+                    <span className="stat-number">
+                      {event.views > 0 ? ((event.clicks / event.views) * 100).toFixed(1) : 0}%
+                    </span>
+                    <span className="stat-label">Engagement</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Actions */}
+              <div className="quick-actions-card">
+                <h3>Quick Actions</h3>
+                <div className="actions-list">
+                  {/* Removed View on Map quick action */}
+                  <Link to="/user-dashboard" className="action-link">
+                    <span className="action-icon"><FaHome /></span>
+                    Back to Dashboard
+                  </Link>
+                  <button 
+                    className="action-link"
+                    onClick={() => window.history.back()}
+                  >
+                    <span className="action-icon"><FaArrowLeft /></span>
+                    Go Back
+                  </button>
+                </div>
+              </div>
+
+              {/* Event Source */}
               <div className="event-info-section">
-                <h3>Event Information</h3>
+                <h3><FaBroadcastTower style={{ marginRight: 8 }} />Event Source</h3>
                 <div className="info-grid">
                   <div className="info-item">
                     <span className="info-label">Source:</span>
@@ -324,32 +353,33 @@ const EventDetail = () => {
               </div>
             </div>
           </div>
+
+          {/* Engagement Analytics */}
+          {analytics && <EngagementChart event={event} />}
+
+          {/* Related Actions */}
+          <section className="related-actions">
+            <div className="actions-container">
+              <h3>Related Actions</h3>
+              <div className="actions-grid">
+                {/* Removed View All Events Map card */}
+                <Link to="/user-dashboard" className="action-card">
+                  <div className="action-icon"><FaChartBar /></div>
+                  <h4>Dashboard</h4>
+                  <p>Back to your dashboard</p>
+                </Link>
+                <Link to="/" className="action-card">
+                  <div className="action-icon"><FaHome /></div>
+                  <h4>Home</h4>
+                  <p>Back to homepage</p>
+                </Link>
+              </div>
+            </div>
+          </section>
         </div>
       </section>
 
-      {/* Related Actions */}
-      <section className="related-actions">
-        <div className="actions-container">
-          <h3>Related Actions</h3>
-          <div className="actions-grid">
-            <Link to="/event-location" className="action-card">
-              <div className="action-icon">🗺️</div>
-              <h4>View All Events Map</h4>
-              <p>See all events on interactive map</p>
-            </Link>
-            <Link to={user?.role === 'event' ? '/organizer-dashboard' : '/user-dashboard'} className="action-card">
-              <div className="action-icon">📊</div>
-              <h4>Dashboard</h4>
-              <p>Back to your dashboard</p>
-            </Link>
-            <Link to="/" className="action-card">
-              <div className="action-icon">🏠</div>
-              <h4>Home</h4>
-              <p>Back to homepage</p>
-            </Link>
-          </div>
-        </div>
-      </section>
+      <Footer />
     </div>
   );
 };

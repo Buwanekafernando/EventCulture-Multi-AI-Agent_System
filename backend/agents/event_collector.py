@@ -29,12 +29,16 @@ SEARCH_QUERIES = [
     "Upcoming events in sri lanka",
     "Colombo events upcoming",
     "Kandy events upcoming",
+    "Upcoming Sports events in sri lanka",
+    "Upcoming Sports events in colombo",
+    "Upcoming Sports events in kandy",
+    "Upcoming International Cricket Events in sri lanka",
     "upcoming business events in sri lanka",
     "upcoming exhibitions in sri lanka",
     "upcoming conferences in sri lanka",
     "upcoming workshops in sri lanka",
     "upcoming music events in sri lanka",
-    "Events in Colombo 2025",
+    "upcoming Big Match cricket events in sri lanka",
     "upcoming exhibitions in colombo",
     "upcoming exhibitions in kandy",
     "upcoming art exhibitions in sri lanka"
@@ -66,7 +70,7 @@ async def search_google_for_events(query: str) -> List[dict]:
     - Various event types: music, tech, art, food, cultural, business, etc.
     - Include both free and paid events
     
-    Return maximum 4 events per query. Return valid JSON array only, no explanations.
+    Return maximum 5 events per query. Return valid JSON array only, no explanations.
     """
     
     try:
@@ -114,7 +118,7 @@ async def search_bing_for_events(query: str) -> List[dict]:
     - Various event types: music, tech, art, food, cultural, business, etc.
     - Include both free and paid events
     
-    Return maximum 4 events per query. Return valid JSON array only, no explanations.
+    Return maximum 5 events per query. Return valid JSON array only, no explanations.
     """
     
     try:

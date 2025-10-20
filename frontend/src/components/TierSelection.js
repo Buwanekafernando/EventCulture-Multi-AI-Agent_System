@@ -10,12 +10,33 @@ const TierSelection = ({ onTierSelected }) => {
     setSelectedTier(tier);
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (selectedTier) {
-      // Store the selected tier in sessionStorage for the auth flow
-      sessionStorage.setItem('selectedTier', selectedTier);
-      onTierSelected(selectedTier);
-      login();
+      try {
+        console.log('Setting tier:', selectedTier);
+        // First, send the selected tier to the backend
+        await onTierSelected(selectedTier);
+        console.log('Tier set successfully, proceeding with login');
+        // Small delay to ensure the session is properly set, then hard-redirect to backend login
+        const apiBaseUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+        setTimeout(() => {
+          try {
+            window.location.href = `${apiBaseUrl}/login`;
+          } catch (e) {
+            // Fallback to existing login function if direct redirect fails
+            login();
+          }
+        }, 100);
+      } catch (error) {
+        console.error('Error setting tier:', error);
+        // Still proceed with login even if tier setting fails
+        const apiBaseUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+        try {
+          window.location.href = `${apiBaseUrl}/login`;
+        } catch (e) {
+          login();
+        }
+      }
     }
   };
 
@@ -33,17 +54,16 @@ const TierSelection = ({ onTierSelected }) => {
         'Basic analytics for your interactions'
       ],
       limitations: [
-        'Cannot register for virtual events',
+        'Cannot register for the events',
         'Limited to 10 recommendations per session',
-        'No advanced location features (directions)',
-        'No priority customer support'
+        'No advanced location features (directions)'
       ],
       popular: false
     },
     {
       id: 'pro',
       name: 'Pro',
-      price: '$9.99',
+      price: '$4.99',
       period: 'per month',
       features: [
         'Everything in Free',
@@ -51,7 +71,6 @@ const TierSelection = ({ onTierSelected }) => {
         'Direct event booking',
         'Enhanced location features with directions',
         'Virtual event registration',
-        'Priority customer support',
         'Advanced analytics and insights',
         'Early access to new features'
       ],

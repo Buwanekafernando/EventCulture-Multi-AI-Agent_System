@@ -17,9 +17,9 @@ const AdminPanel = () => {
     setLoading(true);
     try {
       const result = await authAPI.triggerAgents();
-      showMessage(`✅ ${result.message}`, 'success');
+      showMessage(` ${result.message}`, 'success');
     } catch (error) {
-      showMessage(`❌ Error: ${error.response?.data?.detail || error.message}`, 'error');
+      showMessage(` Error: ${error.response?.data?.detail || error.message}`, 'error');
     } finally {
       setLoading(false);
     }
@@ -29,9 +29,9 @@ const AdminPanel = () => {
     setLoading(true);
     try {
       const result = await authAPI.triggerEventCollection();
-      showMessage(`✅ ${result.message}`, 'success');
+      showMessage(` ${result.message}`, 'success');
     } catch (error) {
-      showMessage(`❌ Error: ${error.response?.data?.detail || error.message}`, 'error');
+      showMessage(` Error: ${error.response?.data?.detail || error.message}`, 'error');
     } finally {
       setLoading(false);
     }
@@ -41,9 +41,9 @@ const AdminPanel = () => {
     setLoading(true);
     try {
       const result = await authAPI.triggerNLPProcessing();
-      showMessage(`✅ ${result.message}`, 'success');
+      showMessage(` ${result.message}`, 'success');
     } catch (error) {
-      showMessage(`❌ Error: ${error.response?.data?.detail || error.message}`, 'error');
+      showMessage(` Error: ${error.response?.data?.detail || error.message}`, 'error');
     } finally {
       setLoading(false);
     }
@@ -52,7 +52,7 @@ const AdminPanel = () => {
   return (
     <div className="admin-panel">
       <div className="admin-header">
-        <h2>🤖 Agent Control Panel</h2>
+        <h2>Agent Control Panel</h2>
         <p>Manually trigger AI agents for event collection and processing</p>
       </div>
 
@@ -64,44 +64,44 @@ const AdminPanel = () => {
 
       <div className="agent-controls">
         <div className="control-group">
-          <h3>🎯 Event Collector Agent</h3>
+          <h3>Event Collector Agent</h3>
           <p>Collects new events from various sources</p>
           <button 
             className="btn btn-primary"
             onClick={handleTriggerEventCollection}
             disabled={loading}
           >
-            {loading ? '⏳ Running...' : '🔄 Run Event Collector'}
+            {loading ? ' Running...' : ' Run Event Collector'}
           </button>
         </div>
 
         <div className="control-group">
-          <h3>🧠 NLP Agent</h3>
+          <h3> NLP Agent</h3>
           <p>Processes and enriches event data</p>
           <button 
             className="btn btn-primary"
             onClick={handleTriggerNLPProcessing}
             disabled={loading}
           >
-            {loading ? '⏳ Running...' : '🔄 Run NLP Agent'}
+            {loading ? ' Running...' : ' Run NLP Agent'}
           </button>
         </div>
 
         <div className="control-group">
-          <h3>🚀 Run Both Agents</h3>
+          <h3> Run Both Agents</h3>
           <p>Execute Event Collector followed by NLP processing</p>
           <button 
             className="btn btn-success"
             onClick={handleTriggerAgents}
             disabled={loading}
           >
-            {loading ? '⏳ Running...' : '🚀 Run All Agents'}
+            {loading ? ' Running...' : ' Run All Agents'}
           </button>
         </div>
       </div>
 
       <div className="admin-info">
-        <h4>ℹ️ Information</h4>
+        <h4>Information</h4>
         <ul>
           <li><strong>Event Collector:</strong> Searches for new events and adds them to the database</li>
           <li><strong>NLP Agent:</strong> Processes events to add summaries, tags, and sentiment analysis</li>

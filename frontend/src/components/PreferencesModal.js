@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FaBullseye } from 'react-icons/fa';
 import '../styles/PreferencesModal.css';
 
 const PreferencesModal = ({ currentPreferences, onSave, onClose }) => {
@@ -36,7 +37,7 @@ const PreferencesModal = ({ currentPreferences, onSave, onClose }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>🎯 Set Your Preferences</h2>
+          <h2><FaBullseye style={{ marginRight: 8 }} />Set Your Preferences</h2>
           <button className="close-btn" onClick={onClose}>×</button>
         </div>
 

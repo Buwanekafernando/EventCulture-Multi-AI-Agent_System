@@ -6,12 +6,11 @@ from datetime import datetime, timedelta
 from db.database import SessionLocal
 from db.models import Event, User, Recommendation
 
-# Configure logging
+# Configure 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class AnalysisAgent:
-    """Analysis Agent for real-time user interaction tracking and analytics."""
     
     def __init__(self):
         self.active_sessions = {}  # Track active user sessions
@@ -70,7 +69,7 @@ class AnalysisAgent:
             return {"status": "error", "message": str(e)}
     
     def track_event_interaction(self, event_id: int, interaction_type: str, user_id: Optional[int] = None, session_id: Optional[str] = None) -> Dict:
-        """Track real-time user interactions with events (views, clicks, bookings)."""
+        """Track real-time user interactions with events."""
         try:
             db = SessionLocal()
             
@@ -186,10 +185,10 @@ class AnalysisAgent:
             db.close()
     
     def get_organizer_dashboard(self, user_id: int) -> Dict:
-        """Get analytics dashboard for event organizers."""
+        """Get analytics dashboard for event organizers.""" #no need now 
         try:
             db = SessionLocal()
-            # Get all events (assuming organizer can see all events for now)
+            # Get all events 
             events = db.query(Event).all()
             
             if not events:

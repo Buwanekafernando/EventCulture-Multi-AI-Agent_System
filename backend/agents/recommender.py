@@ -134,9 +134,9 @@ def get_personalized_recommendations(user_id: int, interests: List[str], sentime
         
         # Apply tier-based limits
         if user_tier == "free":
-            return recommended_events[:10]  # Max 10 for free users
+            return recommended_events[:10]  #  for free users
         else:
-            return recommended_events[:50]  # More for pro users
+            return recommended_events[:50]  # for pro users
         
     except Exception as e:
         print(f"Error getting personalized recommendations: {e}")

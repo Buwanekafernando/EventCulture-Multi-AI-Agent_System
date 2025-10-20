@@ -2,13 +2,13 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import HomePage from './components/HomePage';
-import LoginPage from './components/LoginPage';
+import UserHomePage from './components/UserHomePage';
 import UserOptionPage from './components/UserOptionPage';
 import UserPreferences from './components/UserPreferences';
 import UserDashboard from './components/UserDashboard';
-import OrganizerDashboard from './components/OrganizerDashboard';
-import EventDetailEnhanced from './components/EventDetailEnhanced';
-import EventLocation from './components/EventLocation';
+import EventDetail from './components/EventDetail';
+import LocationMapPage from './components/LocationMapPage';
+import Contact from './components/Contact';
 import AdminPanel from './components/AdminPanel';
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
@@ -20,7 +20,16 @@ function App() {
         <div className="App">
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
+            <Route 
+              path="/user-home" 
+              element={
+                <ProtectedRoute>
+                  <UserHomePage />
+                </ProtectedRoute>
+              } 
+            />
+            {/* Removed EventLocation route */}
+            <Route path="/contact" element={<Contact />} />
             <Route path="/user-option" element={<UserOptionPage />} />
             <Route 
               path="/user-preferences" 
@@ -39,26 +48,19 @@ function App() {
               } 
             />
             <Route 
-              path="/organizer-dashboard" 
-              element={
-                <ProtectedRoute requiredRole="event">
-                  <OrganizerDashboard />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
               path="/event-detail/:eventId" 
               element={
                 <ProtectedRoute>
-                  <EventDetailEnhanced />
+                  <EventDetail />
                 </ProtectedRoute>
               } 
             />
+            {/* Removed EventLocation by id route */}
             <Route 
-              path="/event-location/:eventId" 
+              path="/location-map/:eventId" 
               element={
                 <ProtectedRoute>
-                  <EventLocation />
+                  <LocationMapPage />
                 </ProtectedRoute>
               } 
             />

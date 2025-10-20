@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FaTheaterMasks, FaBullseye, FaMapMarkerAlt, FaTicketAlt, FaMobileAlt, FaSave, FaUser, FaUsers, FaChartBar, FaChartLine, FaClipboardList, FaEnvelope } from 'react-icons/fa';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import '../styles/UserOptionPage.css';
@@ -29,7 +30,7 @@ const UserOptionPage = () => {
       
       // Navigate based on role
       if (role === 'event') {
-        navigate('/organizer-dashboard');
+        navigate('/user-dashboard');
       } else {
         navigate('/user-preferences');
       }
@@ -59,7 +60,7 @@ const UserOptionPage = () => {
       {/* Header */}
       <header className="header">
         <div className="nav-left">
-          <span className="logo">🎭 EventCulture</span>
+          <span className="logo"><FaTheaterMasks style={{ marginRight: 8 }} />EventCulture</span>
         </div>
       </header>
 
@@ -77,16 +78,16 @@ const UserOptionPage = () => {
               onClick={() => setSelectedRole('person')}
             >
               <div className="role-icon">
-                <span className="icon">👤</span>
+                <span className="icon"><FaUser /></span>
               </div>
               <h3>Event Attendee</h3>
               <p>I want to discover and attend events</p>
               <ul className="role-features">
-                <li>🎯 Personalized event recommendations</li>
-                <li>📍 Interactive event maps</li>
-                <li>🎫 Easy event booking</li>
-                <li>📱 Mobile-friendly experience</li>
-                <li>💾 Save favorite events</li>
+                <li><FaBullseye style={{ marginRight: 6 }} />Personalized event recommendations</li>
+                <li><FaMapMarkerAlt style={{ marginRight: 6 }} />Interactive event maps</li>
+                <li><FaTicketAlt style={{ marginRight: 6 }} />Easy event booking</li>
+                <li><FaMobileAlt style={{ marginRight: 6 }} />Mobile-friendly experience</li>
+                <li><FaSave style={{ marginRight: 6 }} />Save favorite events</li>
               </ul>
               <button 
                 className="role-select-btn"
@@ -102,16 +103,16 @@ const UserOptionPage = () => {
               onClick={() => setSelectedRole('event')}
             >
               <div className="role-icon">
-                <span className="icon">🎪</span>
+                <span className="icon"><FaUsers /></span>
               </div>
               <h3>Event Organizer</h3>
               <p>I want to manage events and view analytics</p>
               <ul className="role-features">
-                <li>📊 Analytics dashboard</li>
-                <li>📈 Event performance metrics</li>
-                <li>👥 Audience insights</li>
-                <li>📋 Event management tools</li>
-                <li>📧 Communication features</li>
+                <li><FaChartBar style={{ marginRight: 6 }} />Analytics dashboard</li>
+                <li><FaChartLine style={{ marginRight: 6 }} />Event performance metrics</li>
+                <li><FaUsers style={{ marginRight: 6 }} />Audience insights</li>
+                <li><FaClipboardList style={{ marginRight: 6 }} />Event management tools</li>
+                <li><FaEnvelope style={{ marginRight: 6 }} />Communication features</li>
               </ul>
               <button 
                 className="role-select-btn"

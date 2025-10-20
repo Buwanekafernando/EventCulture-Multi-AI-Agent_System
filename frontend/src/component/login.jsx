@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaTheaterMasks } from 'react-icons/fa';
 import '../styles/login.css'; // Assume CSS file for styling
 
 const Login = () => {
@@ -13,7 +14,7 @@ const Login = () => {
       {/* Header */}
       <header className="header">
         <div className="nav-left">
-          <span className="logo">🎭 EventCulture</span>
+          <span className="logo"><FaTheaterMasks style={{ marginRight: 8 }} />EventCulture</span>
         </div>
       </header>
 

@@ -53,18 +53,22 @@ export const AuthProvider = ({ children }) => {
       // Clear user state immediately to prevent further auth checks
       setUser(null);
       setIsAuthenticated(false);
+      setLoading(true); // Set loading to prevent API calls during logout
       
       // Then call the logout endpoint
       await authAPI.logout();
       
-      // Force page refresh to clear any cached data
-      window.location.reload();
+      // Small delay to ensure state is cleared before redirect
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 100);
     } catch (error) {
       console.error('Logout failed:', error);
-      // Even if logout fails, clear local state
+      // Even if logout fails, clear local state and redirect
       setUser(null);
       setIsAuthenticated(false);
-      window.location.reload();
+      setLoading(false);
+      window.location.href = '/';
     }
   };
 

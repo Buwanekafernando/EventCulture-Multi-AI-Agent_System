@@ -67,47 +67,52 @@ async def startup_event():
     import sys
     
     print("=" * 60)
-    print("🎭 EventCulture Multi-AI-Agent System Starting...")
+    print("EventCulture Multi-AI-Agent System Starting...")
     print("=" * 60)
     
     # Ask user if they want to run the agents
     try:
-        response = input("\n🤖 Do you want to run Event Collector and NLP agents? (y/n): ").strip().lower()
+        response = input("\nDo you want to run Event Collector and NLP agents? (y/n): ").strip().lower()
         
         if response in ['y', 'yes']:
-            print("\n✅ Running Event Collector and NLP agents...")
-            print("📊 This may take a few minutes to collect and process events...")
+            print("\nRunning Event Collector and NLP agents...")
+            print("This may take a few minutes to collect and process events...")
             
             # Run event collection and NLP processing
             asyncio.create_task(run_agents_on_startup())
         else:
-            print("\n⏭️  Skipping agent execution. Server will start with existing database records.")
-            print("💡 You can manually trigger agents later if needed.")
+            print("\n Skipping agent execution. Server will start with existing database records.")
+            print(" You can manually trigger agents later if needed.")
     except (EOFError, KeyboardInterrupt):
-        print("\n⏭️  Skipping agent execution. Server will start with existing database records.")
+        print("\n  Skipping agent execution. Server will start with existing database records.")
     
-    print("\n🚀 Server is ready to accept requests!")
+    print("\n Server is ready to accept requests!")
     print("=" * 60)
 
 async def run_agents_on_startup():
-    """Background task to run Event Collector and NLP agents on startup"""
+    """Background task to run Event Collector, NLP, and Location agents on startup"""
     try:
         from agents.event_collector import collect_event
         from agents.nlp_agent import batch_process_events
+        from agents.location_agent import batch_process_event_locations
         
-        print("🔄 Starting Event Collector agent...")
+        print(" Starting Event Collector agent...")
         result = await collect_event()
-        print(f"✅ Event collection completed: {result.get('events_collected', 0)} events collected")
+        print(f"Event collection completed: {result.get('events_collected', 0)} events collected")
         
-        print("🔄 Starting NLP agent for post-processing...")
+        print(" Starting NLP agent for post-processing...")
         nlp_result = await batch_process_events()
-        print(f"✅ NLP processing completed: {nlp_result.get('processed_count', 0)} events processed")
+        print(f" NLP processing completed: {nlp_result.get('processed_count', 0)} events processed")
         
-        print("🎉 All agents completed successfully!")
+        print(" Starting Location agent for location processing...")
+        location_result = await batch_process_event_locations()
+        print(f" Location processing completed: {location_result.get('processed_count', 0)} events processed")
+        
+        print(" All agents completed successfully!")
         
     except Exception as e:
-        print(f"❌ Agent execution failed: {e}")
-        print("💡 Server will continue running with existing data.")
+        print(f" Agent execution failed: {e}")
+        print(" Server will continue running with existing data.")
 
 @app.get("/")
 def read_root():
@@ -201,24 +206,30 @@ async def serve_robots():
 # Manual agent execution endpoints
 @app.post("/trigger-agents")
 async def trigger_agents_manually():
-    """Manually trigger both Event Collector and NLP agents"""
+    """Manually trigger Event Collector, NLP, and Location agents"""
     try:
         from agents.event_collector import collect_event
         from agents.nlp_agent import batch_process_events
+        from agents.location_agent import batch_process_event_locations
         
         # Run Event Collector
-        print("🔄 Manually triggering Event Collector agent...")
+        print(" Manually triggering Event Collector agent...")
         event_result = await collect_event()
         
         # Run NLP Agent
-        print("🔄 Manually triggering NLP agent...")
+        print(" Manually triggering NLP agent...")
         nlp_result = await batch_process_events()
+        
+        # Run Location Agent
+        print(" Manually triggering Location agent...")
+        location_result = await batch_process_event_locations()
         
         return {
             "status": "success",
-            "message": "Both agents executed successfully",
+            "message": "All agents executed successfully",
             "event_collection": event_result,
-            "nlp_processing": nlp_result
+            "nlp_processing": nlp_result,
+            "location_processing": location_result
         }
     except Exception as e:
         raise HTTPException(
@@ -258,6 +269,23 @@ async def trigger_nlp_processing_manually():
         raise HTTPException(
             status_code=500,
             detail=f"Failed to trigger NLP processing: {str(e)}"
+        )
+
+@app.post("/trigger-location-processing")
+async def trigger_location_processing_manually():
+    """Manually trigger location processing only"""
+    try:
+        from agents.location_agent import batch_process_event_locations
+        result = await batch_process_event_locations()
+        return {
+            "status": "success",
+            "message": "Location processing completed",
+            "result": result
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to trigger location processing: {str(e)}"
         )
 
 

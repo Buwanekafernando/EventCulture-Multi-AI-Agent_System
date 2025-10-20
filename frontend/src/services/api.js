@@ -14,6 +14,35 @@ const api = axios.create({
   },
 });
 
+// Add request interceptor to handle authentication
+api.interceptors.request.use(
+  (config) => {
+    // Add timestamp to prevent caching for auth-related requests
+    if (config.url?.includes('/user') || config.url?.includes('/api/')) {
+      const timestamp = new Date().getTime();
+      config.url += (config.url.includes('?') ? '&' : '?') + `t=${timestamp}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Add response interceptor to handle 401 errors globally
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Don't redirect on 401 for public endpoints
+      if (!error.config.url?.includes('/public')) {
+        console.log('Authentication required for protected endpoint');
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Auth API calls
 export const authAPI = {
   login: () => {
@@ -64,6 +93,11 @@ export const authAPI = {
   
   triggerNLPProcessing: async () => {
     const response = await api.post('/trigger-nlp-processing');
+    return response.data;
+  },
+  
+  triggerLocationProcessing: async () => {
+    const response = await api.post('/trigger-location-processing');
     return response.data;
   }
 };
@@ -138,6 +172,35 @@ export const locationAPI = {
   
   getEventsMapData: async () => {
     const response = await api.get('/api/location/events-map');
+    return response.data;
+  },
+  
+  getGoogleMapsData: async (eventId, userLocation = null) => {
+    const params = userLocation ? `?user_location=${encodeURIComponent(userLocation)}` : '';
+    const response = await api.get(`/api/location/google-maps/${eventId}${params}`);
+    return response.data;
+  },
+  
+  getUserLocationRoutes: async (eventId, userLocation) => {
+    const params = new URLSearchParams({ user_location: userLocation });
+    const response = await api.get(`/api/location/user-routes/${eventId}?${params.toString()}`);
+    return response.data;
+  },
+  
+  getDirections: async (fromLocation, toLocation, travelMode = 'driving') => {
+    const params = new URLSearchParams({ from_location: fromLocation, to_location: toLocation, travel_mode: travelMode });
+    const response = await api.get(`/api/location/directions?${params.toString()}`);
+    return response.data;
+  },
+  
+  getDirectionsSummary: async (fromLocation, toLocation) => {
+    const params = new URLSearchParams({ from_location: fromLocation, to_location: toLocation });
+    const response = await api.get(`/api/location/directions/summary?${params.toString()}`);
+    return response.data;
+  },
+  
+  processLocations: async () => {
+    const response = await api.post('/api/location/process-locations');
     return response.data;
   }
 };

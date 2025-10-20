@@ -35,10 +35,16 @@ async def select_tier(request: Request):
     body = await request.json()
     tier = body.get("tier", "free")
     
+    print(f"Select tier called with: {tier}")
+    print(f"Session ID before: {request.session.get('_id', 'No session ID')}")
+    
     if tier not in ["free", "pro"]:
         raise HTTPException(status_code=400, detail="Invalid tier selection")
     
     request.session["selected_tier"] = tier
+    print(f"Tier stored in session: {request.session.get('selected_tier')}")
+    print(f"Session ID after: {request.session.get('_id', 'No session ID')}")
+    
     return JSONResponse({"status": "success", "tier": tier})
 
 @router.get("/login")
@@ -47,7 +53,14 @@ async def login(request: Request):
     # Ensure we're using the same base URL for consistency
     base_url = str(request.base_url).rstrip('/')
     redirect_uri = f"{base_url}/callback"
-    return await oauth.google.authorize_redirect(request, redirect_uri)
+    
+    # Get the selected tier from session and pass it as state
+    selected_tier = request.session.get("selected_tier", "free")
+    state = f"tier:{selected_tier}"
+    
+    print(f"Login called with tier: {selected_tier}, state: {state}")
+    
+    return await oauth.google.authorize_redirect(request, redirect_uri, state=state)
 
 @router.get("/callback", name="auth_callback")
 async def auth_callback(request: Request):
@@ -55,6 +68,11 @@ async def auth_callback(request: Request):
         # Debug: Print session info
         print(f"Session ID: {request.session.get('_id', 'No session ID')}")
         print(f"Session keys: {list(request.session.keys())}")
+        print(f"Selected tier from session: {request.session.get('selected_tier', 'NOT FOUND')}")
+        
+        # Get tier from OAuth state parameter
+        state = request.query_params.get("state", "")
+        print(f"OAuth state parameter: {state}")
         
         token = await oauth.google.authorize_access_token(request)
         user_info = token.get("userinfo")
@@ -84,8 +102,16 @@ async def auth_callback(request: Request):
         email = user_info.get("email")
         user = db.query(User).filter(User.email == email).first()
         
-        # Get selected tier from session or default to free
-        selected_tier = request.session.get("selected_tier", "free")
+        # Get selected tier from OAuth state parameter or session or default to free
+        selected_tier = "free"
+        if state.startswith("tier:"):
+            selected_tier = state.split(":")[1]
+            print(f"Tier extracted from state: {selected_tier}")
+        else:
+            selected_tier = request.session.get("selected_tier", "free")
+            print(f"Tier from session: {selected_tier}")
+        
+        print(f"Final selected tier for user: {selected_tier}")
         
         if not user:
             user = User(
@@ -98,11 +124,15 @@ async def auth_callback(request: Request):
             db.add(user)
             db.commit()
             db.refresh(user)
+            print(f"New user created with tier: {user.tier}")
         else:
             # Update tier if it was changed during login
             if user.tier != selected_tier:
+                print(f"Updating existing user tier from {user.tier} to {selected_tier}")
                 user.tier = selected_tier
                 db.commit()
+            else:
+                print(f"User tier unchanged: {user.tier}")
         
         # Store session
         request.session["user"] = {
@@ -137,9 +167,9 @@ async def auth_callback(request: Request):
     # Note: Event collection is now handled on server startup, not during login
     # This makes the login process much faster
     
-    # Redirect to user preferences after login for personalized experience
+    # Redirect to frontend user home after successful login
     return RedirectResponse(
-        url=f"/app/?auth=success&user={user_info.get('given_name')}#/user-preferences",
+        url="http://localhost:3000/user-home",
         status_code=302
     )
 

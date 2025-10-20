@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { FaStar, FaRegCircle, FaRocket, FaBullseye, FaFire, FaCalendarAlt, FaMapMarkerAlt, FaCog, FaHome } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { eventsAPI, recommendationsAPI } from '../services/api';
@@ -127,9 +128,9 @@ const UserDashboard = () => {
             <h1>Welcome back, {user?.name}!</h1>
             <div className="user-tier-badge">
               {user?.tier === 'pro' ? (
-                <span className="tier-badge pro">⭐ Pro</span>
+                <span className="tier-badge pro"><FaStar style={{ marginRight: 6 }} />Pro</span>
               ) : (
-                <span className="tier-badge free">🆓 Free</span>
+                <span className="tier-badge free"><FaRegCircle style={{ marginRight: 6 }} />Free</span>
               )}
             </div>
           </div>
@@ -137,7 +138,7 @@ const UserDashboard = () => {
           
           {user?.tier === 'free' && (
             <div className="upgrade-prompt-banner">
-              <p>🚀 Unlock unlimited recommendations and premium features!</p>
+              <p><FaRocket style={{ marginRight: 6 }} />Unlock unlimited recommendations and premium features!</p>
               <button 
                 className="btn btn-upgrade"
                 onClick={() => setShowUpgradePrompt(true)}
@@ -149,7 +150,7 @@ const UserDashboard = () => {
           
           {!userPreferences && (
             <div className="preferences-prompt">
-              <p>🎯 Set your preferences to get personalized recommendations!</p>
+              <p><FaBullseye style={{ marginRight: 6 }} />Set your preferences to get personalized recommendations!</p>
               <button 
                 className="btn btn-primary"
                 onClick={() => setShowPreferences(true)}
@@ -164,7 +165,7 @@ const UserDashboard = () => {
       {/* Personalized Recommendations - Prominently Displayed */}
       <section className="recommendations-section">
         <div className="section-header">
-          <h2>🎯 Recommended for You</h2>
+          <h2><FaBullseye style={{ marginRight: 8 }} />Recommended for You</h2>
           {userPreferences ? (
             <p>Based on your interests: {userPreferences}</p>
           ) : (
@@ -208,7 +209,7 @@ const UserDashboard = () => {
       {/* Trending Events */}
       <section className="trending-section">
         <div className="section-header">
-          <h2>🔥 Trending Events</h2>
+          <h2><FaFire style={{ marginRight: 8 }} />Trending Events</h2>
           <p>Most popular events right now</p>
         </div>
         <div className="events-grid">
@@ -221,7 +222,7 @@ const UserDashboard = () => {
       {/* All Events */}
       <section className="all-events-section">
         <div className="section-header">
-          <h2>📅 All Events</h2>
+          <h2><FaCalendarAlt style={{ marginRight: 8 }} />All Events</h2>
           <p>Browse all available events</p>
         </div>
         <div className="events-grid">
@@ -236,7 +237,7 @@ const UserDashboard = () => {
         <h2>Quick Actions</h2>
         <div className="actions-grid">
           <Link to="/event-location" className="action-card">
-            <div className="action-icon">📍</div>
+            <div className="action-icon"><FaMapMarkerAlt /></div>
             <h3>Event Map</h3>
             <p>View events on interactive map</p>
           </Link>
@@ -244,12 +245,12 @@ const UserDashboard = () => {
             className="action-card"
             onClick={() => setShowPreferences(true)}
           >
-            <div className="action-icon">⚙️</div>
+            <div className="action-icon"><FaCog /></div>
             <h3>Preferences</h3>
             <p>Update your interests</p>
           </button>
           <Link to="/" className="action-card">
-            <div className="action-icon">🏠</div>
+            <div className="action-icon"><FaHome /></div>
             <h3>Home</h3>
             <p>Back to homepage</p>
           </Link>

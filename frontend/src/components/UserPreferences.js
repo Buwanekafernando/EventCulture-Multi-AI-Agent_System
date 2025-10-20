@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { 
+  FaMusic, FaLaptop, FaPalette, FaRunning, FaUtensils, FaGraduationCap, FaBriefcase, FaTheaterMasks, FaTshirt, FaLaugh, FaCamera, FaRegCircle, FaStar, FaLightbulb
+} from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { recommendationsAPI } from '../services/api';
@@ -11,18 +14,18 @@ const UserPreferences = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const eventTypes = [
-    { id: 'music', label: 'Music', icon: '🎵', description: 'Concerts, festivals, live performances' },
-    { id: 'tech', label: 'Technology', icon: '💻', description: 'Conferences, workshops, tech meetups' },
-    { id: 'sports', label: 'Sports', icon: '🏃', description: 'Games, tournaments, fitness events' },
-    { id: 'education', label: 'Education', icon: '🎓', description: 'Workshops, seminars, learning events' },
-    { id: 'food', label: 'Food & Drinks', icon: '🍽️', description: 'Food festivals, tastings, culinary events' },
-    { id: 'art', label: 'Art', icon: '🎨', description: 'Art exhibitions, galleries, design events' },
-    { id: 'business', label: 'Business', icon: '💼', description: 'Networking, conferences, professional events' },
-    { id: 'cultural', label: 'Cultural', icon: '🎭', description: 'Traditional events, cultural celebrations' },
-    { id: 'fashion', label: 'Fashion', icon: '👗', description: 'Fashion shows, style events, runway' },
-    { id: 'comedy', label: 'Comedy', icon: '😂', description: 'Stand-up shows, comedy nights, humor events' },
-    { id: 'theater', label: 'Theater', icon: '🎭', description: 'Plays, musicals, theatrical performances' },
-    { id: 'photography', label: 'Photography', icon: '📸', description: 'Photo exhibitions, workshops, contests' }
+    { id: 'music', label: 'Music', icon: <FaMusic />, description: 'Concerts, festivals, live performances' },
+    { id: 'tech', label: 'Technology', icon: <FaLaptop />, description: 'Conferences, workshops, tech meetups' },
+    { id: 'sports', label: 'Sports', icon: <FaRunning />, description: 'Games, tournaments, fitness events' },
+    { id: 'education', label: 'Education', icon: <FaGraduationCap />, description: 'Workshops, seminars, learning events' },
+    { id: 'food', label: 'Food & Drinks', icon: <FaUtensils />, description: 'Food festivals, tastings, culinary events' },
+    { id: 'art', label: 'Art', icon: <FaPalette />, description: 'Art exhibitions, galleries, design events' },
+    { id: 'business', label: 'Business', icon: <FaBriefcase />, description: 'Networking, conferences, professional events' },
+    { id: 'cultural', label: 'Cultural', icon: <FaTheaterMasks />, description: 'Traditional events, cultural celebrations' },
+    { id: 'fashion', label: 'Fashion', icon: <FaTshirt />, description: 'Fashion shows, style events, runway' },
+    { id: 'comedy', label: 'Comedy', icon: <FaLaugh />, description: 'Stand-up shows, comedy nights, humor events' },
+    { id: 'theater', label: 'Theater', icon: <FaTheaterMasks />, description: 'Plays, musicals, theatrical performances' },
+    { id: 'photography', label: 'Photography', icon: <FaCamera />, description: 'Photo exhibitions, workshops, contests' }
   ];
 
   const handlePreferenceToggle = (preferenceId) => {
@@ -71,13 +74,13 @@ const UserPreferences = () => {
     <div className="user-preferences-container">
       <div className="preferences-card">
         <div className="preferences-header">
-          <h1>Welcome, {user?.name}! 🎉</h1>
+          <h1>Welcome, {user?.name}!</h1>
           <p>Let's personalize your event discovery experience</p>
           <div className="user-tier-indicator">
             {user?.tier === 'pro' ? (
-              <span className="tier-badge pro">⭐ Pro User</span>
+              <span className="tier-badge pro"><FaStar style={{ marginRight: 6 }} />Pro User</span>
             ) : (
-              <span className="tier-badge free">🆓 Free User</span>
+              <span className="tier-badge free"><FaRegCircle style={{ marginRight: 6 }} />Free User</span>
             )}
           </div>
         </div>
@@ -113,12 +116,12 @@ const UserPreferences = () => {
             </p>
             {user?.tier === 'free' && (
               <p className="tier-limit-info">
-                🆓 Free users will see up to 10 personalized recommendations
+                Free users will see up to 10 personalized recommendations
               </p>
             )}
             {user?.tier === 'pro' && (
               <p className="tier-benefit-info">
-                ⭐ Pro users get unlimited personalized recommendations
+                Pro users get unlimited personalized recommendations
               </p>
             )}
           </div>
@@ -142,8 +145,9 @@ const UserPreferences = () => {
           </div>
 
           <div className="preferences-help">
-            <p>
-              💡 <strong>Tip:</strong> You can always update your preferences later from your dashboard
+              <p>
+              <FaLightbulb style={{ marginRight: 6 }} />
+              <strong>Tip:</strong> You can always update your preferences later from your dashboard
             </p>
           </div>
         </div>

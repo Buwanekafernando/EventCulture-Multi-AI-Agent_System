@@ -14,11 +14,44 @@
 .btn-upgrade-small { background: linear-gradient(45deg, #667eea, #764ba2); color: white; border: none; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; white-space: nowrap; }
 .btn-upgrade-small:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); }
 .section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
-.events-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.events-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); 
+  gap: 24px; 
+  padding: 20px 0;
+  justify-items: center;
+}
+
+/* Ensure proper card sizing and spacing */
+.events-grid .event-card {
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+}
 .loading-container, .error-container { display: flex; align-items: center; justify-content: center; height: 60vh; }
 .preferences-btn, .logout-btn { margin-left: 8px; }
 .actions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
 .action-card { display: block; padding: 16px; border: 1px solid #e5e7eb; border-radius: 8px; text-decoration: none; color: #111827; background: #fff; }
+
+/* Responsive Design for Event Cards */
+@media (max-width: 768px) {
+  .events-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 16px 0;
+  }
+  
+  .events-grid .event-card {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .events-grid {
+    gap: 16px;
+    padding: 12px 0;
+  }
+}
 
 /* No Recommendations State */
 .no-recommendations {

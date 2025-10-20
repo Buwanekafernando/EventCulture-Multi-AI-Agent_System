@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Footer.css';
+import logoUser from '../assets/logouser.png';
 
 const Footer = () => {
   return (
@@ -8,7 +9,8 @@ const Footer = () => {
       <div className="footer-container">
         <div className="footer-content">
           <div className="footer-section">
-            <h3>🎭 EventCulture</h3>
+            <img src={logoUser} alt="logo" style={{ width: 28, height: 28, marginRight: 8, verticalAlign: 'middle' }} />
+            <h3>EventCulture</h3>
             <p>Discover amazing events happening around Sri Lanka with our AI-powered recommendation system.</p>
           </div>
           
@@ -17,7 +19,7 @@ const Footer = () => {
             <ul>
               <li><Link to="/">Home</Link></li>
               <li><Link to="/user-dashboard">Dashboard</Link></li>
-              <li><Link to="/event-location">Event Map</Link></li>
+              {/* Removed Event Map link */}
               <li><Link to="/admin">Admin Panel</Link></li>
             </ul>
           </div>
