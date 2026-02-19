@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { 
-  FaMusic, FaLaptop, FaPalette, FaRunning, FaUtensils, FaGraduationCap, FaBriefcase, FaTheaterMasks, FaTshirt, FaLaugh, FaCamera, FaRegCircle, FaStar, FaLightbulb
+  FaMusic, FaLaptop, FaPalette, FaRunning, FaUtensils, FaGraduationCap, FaBriefcase, FaTheaterMasks, FaTshirt, FaLaugh, FaCamera, FaRegCircle, FaStar, FaLightbulb, FaDesktop
 } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -25,7 +25,8 @@ const UserPreferences = () => {
     { id: 'fashion', label: 'Fashion', icon: <FaTshirt />, description: 'Fashion shows, style events, runway' },
     { id: 'comedy', label: 'Comedy', icon: <FaLaugh />, description: 'Stand-up shows, comedy nights, humor events' },
     { id: 'theater', label: 'Theater', icon: <FaTheaterMasks />, description: 'Plays, musicals, theatrical performances' },
-    { id: 'photography', label: 'Photography', icon: <FaCamera />, description: 'Photo exhibitions, workshops, contests' }
+    { id: 'photography', label: 'Photography', icon: <FaCamera />, description: 'Photo exhibitions, workshops, contests' },
+    { id: 'visual', label: 'Visual (Online)', icon: <FaDesktop />, description: 'Virtual events, online conferences, webinars' }
   ];
 
   const handlePreferenceToggle = (preferenceId) => {

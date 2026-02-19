@@ -58,7 +58,7 @@ def classify_event_type(text: str, location: str = "") -> str:
         if is_virtual_event(location, text):
             return "visual"  # Mark virtual events as "visual" type
         
-        candidate_labels = ["music", "tech", "sports", "education", "food", "art", "business", "cultural", "fashion", "comedy", "theater", "photography", "other"]
+        candidate_labels = ["music", "tech", "sports", "education", "food", "art", "business", "cultural", "fashion", "comedy", "theater", "photography", "visual", "other"]
         result = classifier(text, candidate_labels, multi_label=False)
         return result["labels"][0] if result["labels"] else "other"
     except Exception as e:

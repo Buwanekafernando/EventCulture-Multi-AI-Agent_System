@@ -44,13 +44,8 @@ const UserDashboard = () => {
     try {
       setLoading(true);
       
-      // Load public data first (events and trending) - these work without auth
-      const [eventsData, trendingData] = await Promise.all([
-        eventsAPI.getEvents(),
-        recommendationsAPI.getTrendingEvents()
-      ]);
-      
-      setEvents(eventsData.slice(0, 8));
+      // Load trending events first (these work without auth)
+      const trendingData = await recommendationsAPI.getTrendingEvents();
       setTrendingEvents(trendingData.slice(0, 4));
       
       // Only load user-specific data if user is authenticated
@@ -59,14 +54,26 @@ const UserDashboard = () => {
           const preferencesData = await recommendationsAPI.getUserPreferences(user.id);
           setUserPreferences(preferencesData.preferences || '');
           
-          // Load personalized recommendations if user has preferences
+          // Load filtered events based on user preferences
           if (preferencesData.preferences) {
+            const filteredEventsData = await eventsAPI.getFilteredEvents(preferencesData.preferences);
+            setEvents(filteredEventsData.slice(0, 8));
             await loadPersonalizedRecommendations();
+          } else {
+            // If no preferences, load all events
+            const eventsData = await eventsAPI.getEvents();
+            setEvents(eventsData.slice(0, 8));
           }
         } catch (prefError) {
           console.warn('Could not load user preferences:', prefError);
-          // Continue without user preferences
+          // Fallback to all events if preferences fail
+          const eventsData = await eventsAPI.getEvents();
+          setEvents(eventsData.slice(0, 8));
         }
+      } else {
+        // For non-authenticated users, load all events
+        const eventsData = await eventsAPI.getEvents();
+        setEvents(eventsData.slice(0, 8));
       }
     } catch (error) {
       console.error('Error loading dashboard data:', error);
@@ -89,6 +96,16 @@ const UserDashboard = () => {
     try {
       await recommendationsAPI.updateUserPreferences(user.id, newPreferences);
       setUserPreferences(newPreferences);
+      
+      // Reload filtered events and personalized recommendations
+      if (newPreferences) {
+        const filteredEventsData = await eventsAPI.getFilteredEvents(newPreferences);
+        setEvents(filteredEventsData.slice(0, 8));
+      } else {
+        const eventsData = await eventsAPI.getEvents();
+        setEvents(eventsData.slice(0, 8));
+      }
+      
       await loadPersonalizedRecommendations();
       setShowPreferences(false);
     } catch (error) {
@@ -167,7 +184,19 @@ const UserDashboard = () => {
         <div className="section-header">
           <h2><FaBullseye style={{ marginRight: 8 }} />Recommended for You</h2>
           {userPreferences ? (
-            <p>Based on your interests: {userPreferences}</p>
+            <div className="interests-display">
+              <div className="interests-label">
+                <span className="interests-icon">🎯</span>
+                <span className="interests-text">Based on your interests:</span>
+              </div>
+              <div className="interests-badges">
+                {userPreferences.split(', ').map((interest, index) => (
+                  <span key={index} className="interest-badge">
+                    {interest.charAt(0).toUpperCase() + interest.slice(1)}
+                  </span>
+                ))}
+              </div>
+            </div>
           ) : (
             <p>Set your preferences to get personalized recommendations</p>
           )}
@@ -219,11 +248,18 @@ const UserDashboard = () => {
         </div>
       </section>
 
-      {/* All Events */}
+      {/* Filtered Events */}
       <section className="all-events-section">
         <div className="section-header">
-          <h2><FaCalendarAlt style={{ marginRight: 8 }} />All Events</h2>
-          <p>Browse all available events</p>
+          <h2><FaCalendarAlt style={{ marginRight: 8 }} />
+            {userPreferences ? 'Events for You' : 'All Events'}
+          </h2>
+          <p>
+            {userPreferences 
+              ? `Events matching your interests: ${userPreferences}` 
+              : 'Browse all available events'
+            }
+          </p>
         </div>
         <div className="events-grid">
           {events.map((event) => (

@@ -118,6 +118,20 @@ export const eventsAPI = {
     }
   },
   
+  getFilteredEvents: async (eventTypes) => {
+    try {
+      const response = await api.get(`/api/collector/events/filtered/?event_types=${encodeURIComponent(eventTypes)}`);
+      return response.data;
+    } catch (error) {
+      if (error.response?.status === 401) {
+        // Fallback to public endpoint if not authenticated
+        const response = await api.get('/api/collector/events/public/');
+        return response.data;
+      }
+      throw error;
+    }
+  },
+  
   getEvent: async (eventId) => {
     try {
       const response = await api.get(`/api/collector/events/${eventId}`);

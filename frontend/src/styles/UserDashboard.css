@@ -14,6 +14,114 @@
 .btn-upgrade-small { background: linear-gradient(45deg, #667eea, #764ba2); color: white; border: none; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; white-space: nowrap; }
 .btn-upgrade-small:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); }
 .section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+
+/* Interests Display Styles */
+.interests-display {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.interests-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.interests-icon {
+  font-size: 1.2rem;
+  animation: pulse 2s infinite;
+}
+
+.interests-text {
+  color: #6b7280;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.interests-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.interest-badge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.interest-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.interest-badge:hover::before {
+  left: 100%;
+}
+
+.interest-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Special styling for different interest types */
+.interest-badge:nth-child(1) {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ffa500 100%);
+  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+}
+
+.interest-badge:nth-child(2) {
+  background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+  box-shadow: 0 2px 8px rgba(78, 205, 196, 0.3);
+}
+
+.interest-badge:nth-child(3) {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  color: #333;
+  box-shadow: 0 2px 8px rgba(168, 237, 234, 0.3);
+}
+
+.interest-badge:nth-child(4) {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  color: #333;
+  box-shadow: 0 2px 8px rgba(252, 182, 159, 0.3);
+}
+
+.interest-badge:nth-child(5) {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+/* Pulse animation for the target icon */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 .events-grid { 
   display: grid; 
   grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); 
@@ -44,12 +152,54 @@
   .events-grid .event-card {
     max-width: 100%;
   }
+  
+  /* Responsive interests display */
+  .interests-display {
+    margin-top: 12px;
+  }
+  
+  .interests-label {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .interests-badges {
+    gap: 6px;
+  }
+  
+  .interest-badge {
+    padding: 5px 12px;
+    font-size: 0.8rem;
+  }
 }
 
 @media (max-width: 480px) {
   .events-grid {
     gap: 16px;
     padding: 12px 0;
+  }
+  
+  /* Mobile interests display */
+  .interests-display {
+    margin-top: 8px;
+  }
+  
+  .interests-label {
+    gap: 6px;
+  }
+  
+  .interests-text {
+    font-size: 0.9rem;
+  }
+  
+  .interests-badges {
+    gap: 4px;
+  }
+  
+  .interest-badge {
+    padding: 4px 10px;
+    font-size: 0.75rem;
   }
 }
 

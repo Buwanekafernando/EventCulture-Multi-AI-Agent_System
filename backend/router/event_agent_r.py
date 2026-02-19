@@ -36,6 +36,43 @@ def list_events_public():
     finally:
         db.close()
 
+@router.get("/events/filtered/", response_model=List[EventOut])
+def list_events_filtered(event_types: str = "", current_user: dict = Depends(get_current_user)):
+    """List events filtered by user's selected event types (requires authentication)"""
+    db = SessionLocal()
+    try:
+        if not event_types:
+            # If no event types specified, return all events
+            events = db.query(Event).all()
+            return events
+        
+        # Parse event types from comma-separated string
+        selected_types = [event_type.strip().lower() for event_type in event_types.split(',') if event_type.strip()]
+        
+        if not selected_types:
+            events = db.query(Event).all()
+            return events
+        
+        # Filter events by event_type
+        filtered_events = []
+        all_events = db.query(Event).all()
+        
+        for event in all_events:
+            if event.event_type:
+                event_type_lower = event.event_type.lower().strip()
+                # Check if event type matches any of the selected types
+                if any(selected_type == event_type_lower or selected_type in event_type_lower.split() for selected_type in selected_types):
+                    filtered_events.append(event)
+            elif event.tags:
+                # Also check tags if event_type is not available
+                event_tags = [tag.lower().strip() for tag in event.tags] if isinstance(event.tags, list) else [str(event.tags).lower().strip()]
+                if any(any(selected_type == tag or selected_type in tag.split() for tag in event_tags) for selected_type in selected_types):
+                    filtered_events.append(event)
+        
+        return filtered_events
+    finally:
+        db.close()
+
 @router.get("/events/{event_id}", response_model=EventOut)
 def get_event(event_id: int, current_user: dict = Depends(get_current_user)):
     """Get a specific event by ID (requires authentication)"""

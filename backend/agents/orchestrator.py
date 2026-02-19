@@ -5,6 +5,7 @@ from router.rec_agent_r import router as recommender_router
 from router.location_agent_r import router as location_router
 from router.analysis_agent_r import router as analysis_router
 
+# Create a router for the orchestrator
 router = APIRouter()
 
 router.include_router(collector_router, prefix="/collector")

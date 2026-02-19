@@ -1,5 +1,6 @@
 import os
 import json
+import re
 import google.generativeai as genai
 from typing import List, Dict
 from datetime import datetime, timedelta
@@ -13,6 +14,9 @@ def query_gemini(interests: List[str], sentiment: str) -> List[dict]:
     prompt = f"""
     You are an intelligent event recommender for Sri Lanka. Based on the user's interests in {', '.join(interests)}
     and preference for {sentiment} experiences, list 5 upcoming events in Sri Lanka.
+
+    IMPORTANT: Only generate events that are EXACTLY of the following types: {', '.join(interests)}
+    Do NOT generate events of other types like cultural, business, etc. unless specifically requested.
 
     For each event, return:
     - event_name
@@ -49,29 +53,28 @@ def get_personalized_recommendations(user_id: int, interests: List[str], sentime
             return []
         
         # Get events from database that match user interests
+        # Only consider events that have been processed by NLP agent
         events = db.query(Event).filter(
-            Event.date >= datetime.now()  # Only future events
+            Event.date >= datetime.now(),  # Only future events
+            Event.event_type.isnot(None),  # Only events with event_type set
+            Event.event_type != ""  # Exclude empty event_type
         ).all()
         
         # Filter events based on interests and sentiment
         recommended_events = []
         
         for event in events:
-            # Check if event matches user interests
+            # Check if event matches user interests - STRICT MATCHING ONLY
             event_matches = False
             
-            # Check event tags
-            if event.tags and any(interest.lower() in str(event.tags).lower() for interest in interests):
-                event_matches = True
-            
-            # Check event type
-            if event.event_type and any(interest.lower() in event.event_type.lower() for interest in interests):
-                event_matches = True
-            
-            # Check event name and description
-            event_text = f"{event.event_name} {event.description or ''}".lower()
-            if any(interest.lower() in event_text for interest in interests):
-                event_matches = True
+            # Since we only consider events with event_type set, we can rely on exact matching
+            event_type_lower = event.event_type.lower().strip()
+            for interest in interests:
+                interest_lower = interest.lower().strip()
+                # Only match if the event_type exactly matches the user's interest
+                if interest_lower == event_type_lower:
+                    event_matches = True
+                    break
             
             if event_matches:
                 # Check virtual event restrictions for free users
